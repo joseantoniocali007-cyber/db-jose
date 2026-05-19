@@ -4,10 +4,10 @@ from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
 
-DB_URL = os.getenv("postgresql://db_render_jose_user:b93nb6HSzEHA0FtdSYwECYPtKJ5zvUT1@dpg-d823lodckfvc73evclm0-a.oregon-postgres.render.com/db_render_jose")
+DATABASE_URL = os.getenv("postgresql://db_render_jose_user:b93nb6HSzEHA0FtdSYwECYPtKJ5zvUT1@dpg-d823lodckfvc73evclm0-a.oregon-postgres.render.com/db_render_jose")
 
 def get_db_connection():
-    return psycopg2.connect(DB_URL, sslmode='require')
+    return psycopg2.connect(DATABASE_URL, sslmode='require')
 
 @app.route('/')
 def index():
