@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
 
-DATABASE_URL = "postgresql://db_render_jose_user:b93nb6HSzEHA0FtdSYWECYPtKJ5zvUT1@dpg-d823lodckfvc73evclm0-a.oregon-postgres.render.com/db_render_jose"
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 def get_db_connection():
     return psycopg2.connect(DATABASE_URL, sslmode='require')
