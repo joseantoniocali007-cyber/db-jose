@@ -3,7 +3,8 @@ import psycopg2
 from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
-DB_URL = 'postgresql://db_render_jose_user:b93nb6HSzEHA0FtdSYwECYPtKJ5zvUT1@dpg-d823lodckfvc73evclm0-a.oregon-postgres.render.com/db_render_jose'
+
+DB_URL = os.getenv("postgresql://db_render_jose_user:b93nb6HSzEHA0FtdSYwECYPtKJ5zvUT1@dpg-d823lodckfvc73evclm0-a.oregon-postgres.render.com/db_render_jose")
 
 def get_db_connection():
     return psycopg2.connect(DB_URL, sslmode='require')
@@ -20,10 +21,15 @@ def index():
 
 @app.route('/add', methods=['POST'])
 def add_user():
-    nombre, email = request.form['nombre'], request.form['email']
+    nombre = request.form['nombre']
+    email = request.form['email']
+
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute('INSERT INTO usuarios (nombre, email) VALUES (%s, %s)', (nombre, email))
+    cur.execute(
+        'INSERT INTO usuarios (nombre, email) VALUES (%s, %s)',
+        (nombre, email)
+    )
     conn.commit()
     cur.close()
     conn.close()
@@ -40,4 +46,5 @@ def delete_user(id):
     return redirect('/')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
